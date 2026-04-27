@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pesta Satu Hari, Beban Bertahun-Tahun — Edukasi Keuangan Pernikahan</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='r1' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23d4a056'/><stop offset='1' stop-color='%23854f0b'/></linearGradient><linearGradient id='r2' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c93838'/><stop offset='1' stop-color='%23a32d2d'/></linearGradient></defs><circle cx='37' cy='55' r='26' fill='none' stroke='url(%23r1)' stroke-width='9'/><circle cx='63' cy='55' r='26' fill='none' stroke='url(%23r2)' stroke-width='9'/><path d='M50 32 C50 32 43 28 43 22 C43 18 47 17 50 20 C53 17 57 18 57 22 C57 28 50 32 50 32 Z' fill='%23a32d2d'/></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23faf2e8'/><defs><linearGradient id='r1' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23d4a056'/><stop offset='1' stop-color='%23854f0b'/></linearGradient><linearGradient id='r2' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c93838'/><stop offset='1' stop-color='%23a32d2d'/></linearGradient></defs><circle cx='37' cy='55' r='26' fill='none' stroke='url(%23r1)' stroke-width='9'/><circle cx='63' cy='55' r='26' fill='none' stroke='url(%23r2)' stroke-width='9'/><path d='M50 32 C50 32 43 28 43 22 C43 18 47 17 50 20 C53 17 57 18 57 22 C57 28 50 32 50 32 Z' fill='%23a32d2d'/></svg>">
+<meta name="theme-color" content="#faf2e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1f1a16" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,7 +22,9 @@
   --warning-bg: #faeeda; --warning-text: #854f0b; --warning-border: rgba(133,79,11,0.25);
   --success-bg: #eaf3de; --success-text: #3b6d11; --success-border: rgba(59,109,17,0.25);
   --info-bg: #e6f1fb; --info-text: #185fa5; --info-border: rgba(24,95,165,0.25);
+  --splash-1: #faf2e8; --splash-2: #f3e2d0; --splash-3: #efd4be;
   --radius: 10px; --radius-lg: 14px;
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -26,10 +35,179 @@
     --warning-bg: #2a1e0a; --warning-text: #fac775; --warning-border: rgba(250,199,117,0.22);
     --success-bg: #162010; --success-text: #c0dd97; --success-border: rgba(192,221,151,0.22);
     --info-bg: #0d1e30; --info-text: #85b7eb; --info-border: rgba(133,183,235,0.22);
+    --splash-1: #1f1a16; --splash-2: #2a1e18; --splash-3: #34221a;
   }
 }
 
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: var(--bg3); color: var(--text); line-height: 1.7; font-size: 15px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: var(--bg3); color: var(--text); line-height: 1.7; font-size: 15px; overflow-x: hidden; }
+
+/* ============== SPLASH PAGE ============== */
+.splash {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem 1.5rem; text-align: center; overflow: hidden;
+  background: linear-gradient(135deg, var(--splash-1) 0%, var(--splash-2) 50%, var(--splash-3) 100%);
+  transition: opacity .9s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.4,0,.2,1);
+}
+.splash.dismissed { opacity: 0; transform: scale(1.04); pointer-events: none; }
+
+.splash-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.splash-particle {
+  position: absolute; font-size: 22px; opacity: 0;
+  animation: floatUp 14s linear infinite;
+  filter: blur(.3px);
+}
+@keyframes floatUp {
+  0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+  8% { opacity: .18; }
+  92% { opacity: .18; }
+  100% { transform: translateY(-15vh) rotate(20deg); opacity: 0; }
+}
+
+.splash-grain {
+  position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image:
+    radial-gradient(circle at 20% 35%, rgba(0,0,0,0.04) 1px, transparent 1.5px),
+    radial-gradient(circle at 75% 65%, rgba(0,0,0,0.03) 1px, transparent 1.5px),
+    radial-gradient(circle at 50% 90%, rgba(0,0,0,0.03) 1px, transparent 1.5px);
+  background-size: 60px 60px, 80px 80px, 100px 100px;
+}
+
+.splash-content {
+  position: relative; z-index: 2; max-width: 460px; width: 100%;
+  animation: splashFade 1.2s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes splashFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.splash-icon-wrap {
+  display: inline-block; margin-bottom: 1.5rem; position: relative;
+}
+.splash-icon {
+  font-size: 56px; display: inline-block;
+  animation: ringFloat 4s ease-in-out infinite;
+}
+@keyframes ringFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-6px) rotate(3deg); }
+}
+.splash-icon-wrap::before, .splash-icon-wrap::after {
+  content: ''; position: absolute; top: 50%;
+  width: 40px; height: 1px; background: var(--text2); opacity: .4;
+}
+.splash-icon-wrap::before { right: calc(100% + 16px); }
+.splash-icon-wrap::after { left: calc(100% + 16px); }
+
+.splash-tag {
+  font-size: 11px; letter-spacing: 0.22em; font-weight: 600;
+  color: var(--text2); margin-bottom: 1.75rem;
+  animation: splashFadeDelay .8s .25s both;
+}
+
+.splash-quote {
+  font-family: var(--serif); font-weight: 500; font-style: italic;
+  font-size: clamp(26px, 6.5vw, 38px); line-height: 1.32;
+  color: var(--text); margin-bottom: 1.5rem; letter-spacing: -0.01em;
+  position: relative; padding: 0 .5rem;
+  animation: splashFadeDelay .9s .4s both;
+}
+.splash-quote .qmark {
+  font-family: var(--serif); font-style: normal; font-weight: 600;
+  color: var(--danger-text); font-size: 1.4em; line-height: 0;
+  vertical-align: -.18em; margin: 0 .08em; opacity: .8;
+}
+
+.splash-sub {
+  font-size: 14px; color: var(--text2); line-height: 1.75;
+  max-width: 380px; margin: 0 auto 2rem;
+  animation: splashFadeDelay .9s .55s both;
+}
+
+.splash-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border-radius: 99px; border: none;
+  background: var(--text); color: var(--bg);
+  font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform .25s, box-shadow .25s;
+  animation: splashFadeDelay .9s .7s both, btnPulse 2.4s 2s ease-in-out infinite;
+}
+.splash-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.22), 0 4px 8px rgba(0,0,0,0.1); }
+.splash-btn:active { transform: translateY(0); }
+.splash-btn svg { transition: transform .25s; }
+.splash-btn:hover svg { transform: translateX(4px); }
+
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08), 0 0 0 0 rgba(163,45,45,0.4); }
+  50% { box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08), 0 0 0 12px rgba(163,45,45,0); }
+}
+
+.splash-hint {
+  margin-top: 1.5rem; font-size: 11px; color: var(--text3);
+  letter-spacing: 0.06em;
+  animation: splashFadeDelay .9s .85s both;
+}
+.splash-hint .note { display: inline-block; animation: noteWiggle 2s ease-in-out infinite; }
+@keyframes noteWiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+
+@keyframes splashFadeDelay {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============== AUDIO CONTROL ============== */
+.audio-ctrl {
+  position: fixed; top: 14px; right: 14px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--bg); color: var(--text);
+  border: 0.5px solid var(--border2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14), 0 1px 3px rgba(0,0,0,0.06);
+  z-index: 1000; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  transition: transform .2s, box-shadow .2s, background .2s;
+  font-family: inherit;
+}
+.audio-ctrl.shown { display: flex; animation: audioPop .55s cubic-bezier(.22,1,.36,1) both; }
+.audio-ctrl:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+.audio-ctrl:active { transform: scale(.96); }
+.audio-ctrl svg { width: 16px; height: 16px; position: relative; z-index: 2; }
+.audio-ctrl::before {
+  content: ''; position: absolute; inset: -3px;
+  border-radius: 50%; border: 1.5px solid var(--info-text);
+  opacity: 0; pointer-events: none;
+}
+.audio-ctrl.playing::before {
+  animation: audioRing 2.2s ease-out infinite;
+}
+@keyframes audioRing {
+  0% { transform: scale(1); opacity: .55; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+@keyframes audioPop {
+  from { opacity: 0; transform: scale(.4) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.audio-ctrl .note-disc {
+  position: absolute; inset: 6px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--bg2), var(--bg3), var(--bg2));
+  opacity: .4;
+  animation: discSpin 6s linear infinite;
+  animation-play-state: paused;
+}
+.audio-ctrl.playing .note-disc { animation-play-state: running; }
+@keyframes discSpin { to { transform: rotate(360deg); } }
+
+/* ============== MAIN CONTENT ============== */
+.main-content { opacity: 0; transition: opacity 1.2s ease .15s; }
+.main-content.shown { opacity: 1; }
+
 .wrap { max-width: 680px; margin: 2rem auto; background: var(--bg); border-radius: 20px; overflow: hidden; border: 0.5px solid var(--border); }
 @media (max-width: 720px) { .wrap { margin: 0; border-radius: 0; } body { background: var(--bg); } }
 
@@ -56,7 +234,22 @@ input[type=range] { width: 100%; accent-color: var(--info-text); cursor: pointer
 .quote-block::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--danger-text), var(--warning-text)); border-radius: 99px; }
 .closing-strip { height: 4px; background: linear-gradient(90deg, #a32d2d, #854f0b, #3b6d11, #185fa5); background-size: 200% 100%; animation: shimmer 3s linear infinite; }
 
-/* ANIMATIONS */
+/* Investment type badge */
+.inv-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 99px;
+  font-size: 12px; font-weight: 600; margin-top: 12px;
+  transition: all .3s;
+}
+.slider-marks {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: var(--text3); margin-top: 6px;
+  position: relative;
+}
+.slider-marks span { flex: 1; text-align: center; padding: 0 2px; line-height: 1.3; }
+.slider-marks span:first-child { text-align: left; }
+.slider-marks span:last-child { text-align: right; }
+
 @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes popIn { 0% { opacity:0; transform:scale(0.75); } 70% { transform:scale(1.05); } 100% { opacity:1; transform:scale(1); } }
 @keyframes barGrow { from { width: 0 !important; } }
@@ -75,6 +268,48 @@ input[type=range] { width: 100%; accent-color: var(--info-text); cursor: pointer
 </style>
 </head>
 <body>
+
+<!-- ============== SPLASH PAGE ============== -->
+<div class="splash" id="splash">
+  <div class="splash-grain"></div>
+  <div class="splash-particles">
+    <span class="splash-particle" style="left:8%;animation-delay:0s">💍</span>
+    <span class="splash-particle" style="left:22%;animation-delay:3s">💕</span>
+    <span class="splash-particle" style="left:36%;animation-delay:6s">💰</span>
+    <span class="splash-particle" style="left:50%;animation-delay:9s">🌸</span>
+    <span class="splash-particle" style="left:64%;animation-delay:2s">💍</span>
+    <span class="splash-particle" style="left:78%;animation-delay:5s">💕</span>
+    <span class="splash-particle" style="left:92%;animation-delay:8s">💰</span>
+  </div>
+  <div class="splash-content">
+    <div class="splash-icon-wrap">
+      <span class="splash-icon">💍</span>
+    </div>
+    <div class="splash-tag">PENGINGAT SEBELUM MENIKAH</div>
+    <h1 class="splash-quote">
+      <span class="qmark">&ldquo;</span>Persiapkan pernikahanmu untuk masa depan yang lebih baik<span class="qmark">&rdquo;</span>
+    </h1>
+    <div class="splash-sub">Karena cinta yang kuat dimulai dari fondasi finansial yang kokoh &mdash; bukan dari pesta semalam yang menyisakan utang bertahun-tahun.</div>
+    <button class="splash-btn" onclick="openInvitation()" type="button">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      <span>Buka Edukasi</span>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <div class="splash-hint"><span class="note">🎵</span> &nbsp;Lagu pengiring akan diputar secara otomatis</div>
+  </div>
+</div>
+
+<!-- ============== AUDIO ============== -->
+<button class="audio-ctrl" id="audioCtrl" onclick="toggleAudio()" type="button" aria-label="Toggle music">
+  <span class="note-disc"></span>
+  <svg id="acIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+</button>
+<audio id="bgAudio" loop preload="metadata">
+  <source src="https://github.com/ardlifirdaus/wedding-invitation-pages/raw/refs/heads/main/audio/nina.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============== MAIN CONTENT ============== -->
+<div class="main-content" id="mainContent">
 <div class="wrap">
 
 <div class="closing-strip"></div>
@@ -97,7 +332,7 @@ input[type=range] { width: 100%; accent-color: var(--info-text); cursor: pointer
   <div class="step-badge"><span class="step-num">1</span> ANGKA YANG HARUS KAMU KETAHUI</div>
   <div style="background:var(--danger-bg);border:0.5px solid var(--danger-border);border-radius:var(--radius);padding:.65rem 1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px">
     <span style="font-size:8px;color:var(--danger-text);animation:pulse 1.5s ease-in-out infinite;display:inline-block">&#9679;</span>
-    <span style="font-size:12px;font-weight:600;color:var(--danger-text)">Di Indonesia, lebih dari 516.000 pasangan bercerai setiap tahun — dan masalah ekonomi adalah pemicu utamanya.</span>
+    <span style="font-size:12px;font-weight:600;color:var(--danger-text)">Di Indonesia, lebih dari 516.000 pasangan bercerai setiap tahun &mdash; dan masalah ekonomi adalah pemicu utamanya.</span>
   </div>
   <div class="g3">
     <div class="met" style="animation:popIn .5s .1s ease both">
@@ -233,7 +468,24 @@ input[type=range] { width: 100%; accent-color: var(--info-text); cursor: pointer
 <!-- S5: INVESTMENT -->
 <div class="sec reveal">
   <div class="step-badge"><span class="step-num">5</span> JIKA UANG PESTA DIINVESTASIKAN</div>
-  <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Dengan asumsi return 11%/tahun &mdash; rata-rata reksa dana saham Indonesia jangka panjang.</div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Geser slider untuk mencoba berbagai asumsi return investasi &mdash; dari yang paling aman hingga lebih agresif.</div>
+  <div class="card" style="margin-bottom:12px">
+    <div style="margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:8px">
+        <span style="color:var(--text2)">📈 Asumsi return tahunan</span>
+        <span style="font-weight:700;font-size:18px;color:var(--text)" id="lblReturn">5,4%</span>
+      </div>
+      <input type="range" id="slReturn" min="4" max="11" value="5.4" step="0.1">
+      <div class="slider-marks">
+        <span>4%<br><span style="color:var(--text2)">Deposito</span></span>
+        <span>5,4%<br><span style="color:var(--text2)">SBN</span></span>
+        <span>~7%<br><span style="color:var(--text2)">RD Tetap</span></span>
+        <span>~9%<br><span style="color:var(--text2)">Campuran</span></span>
+        <span>11%<br><span style="color:var(--text2)">Saham</span></span>
+      </div>
+    </div>
+    <div id="invBadgeWrap" style="text-align:center"></div>
+  </div>
   <div id="investOut"></div>
 </div>
 
@@ -288,8 +540,81 @@ input[type=range] { width: 100%; accent-color: var(--info-text); cursor: pointer
 
 <div class="closing-strip"></div>
 </div>
+</div>
 
 <script>
+/* ============== SPLASH + AUDIO ============== */
+let isPlaying = false;
+let userOpened = false;
+
+function openInvitation() {
+  if (userOpened) return;
+  userOpened = true;
+
+  const splash = document.getElementById('splash');
+  const main = document.getElementById('mainContent');
+  const audio = document.getElementById('bgAudio');
+  const ctrl = document.getElementById('audioCtrl');
+
+  splash.classList.add('dismissed');
+  main.classList.add('shown');
+
+  // Try to autoplay (user click counts as interaction, so this should work)
+  audio.volume = 0.35;
+  const playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      isPlaying = true;
+      ctrl.classList.add('shown', 'playing');
+      updateAudioIcon();
+    }).catch(err => {
+      console.warn('Autoplay blocked:', err);
+      isPlaying = false;
+      ctrl.classList.add('shown');
+      updateAudioIcon();
+    });
+  }
+
+  // Remove splash from DOM after animation completes
+  setTimeout(() => { splash.style.display = 'none'; }, 1100);
+
+  // Trigger reveal observer for already-visible sections
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 200);
+}
+
+function toggleAudio() {
+  const audio = document.getElementById('bgAudio');
+  const ctrl = document.getElementById('audioCtrl');
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    ctrl.classList.remove('playing');
+  } else {
+    audio.play().then(() => {
+      isPlaying = true;
+      ctrl.classList.add('playing');
+    }).catch(err => console.warn('Play failed:', err));
+  }
+  updateAudioIcon();
+}
+
+function updateAudioIcon() {
+  const icon = document.getElementById('acIcon');
+  if (isPlaying) {
+    // Music note (playing)
+    icon.innerHTML = '<path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/>';
+  } else {
+    // Muted speaker
+    icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+  }
+}
+
+/* ============== FORMATTING ============== */
 function fmtM(n) {
   n = Math.round(n);
   if (n >= 1e9) return 'Rp '+(n/1e9).toFixed(1)+' miliar';
@@ -298,16 +623,36 @@ function fmtM(n) {
   return 'Rp '+n.toLocaleString('id-ID');
 }
 
+function fmtPct(n) {
+  return n.toFixed(1).replace('.', ',') + '%';
+}
+
+/* ============== INVESTMENT TYPE LOOKUP ============== */
+function getInvestmentType(rate) {
+  if (rate < 4.5)   return { name: 'Deposito Bank', desc: 'Risiko sangat rendah, dijamin LPS hingga Rp 2 miliar', icon: '🏦', color: 'success' };
+  if (rate < 5.8)   return { name: 'SBN Ritel (ORI/SBR/SR)', desc: 'Dijamin negara, risiko sangat rendah', icon: '🛡️', color: 'success' };
+  if (rate < 7.5)   return { name: 'Reksadana Pendapatan Tetap', desc: 'Risiko rendah, mayoritas obligasi pemerintah & korporasi', icon: '📊', color: 'info' };
+  if (rate < 9.5)   return { name: 'Reksadana Campuran', desc: 'Risiko menengah, kombinasi saham & obligasi', icon: '⚖️', color: 'info' };
+  if (rate < 10.5)  return { name: 'Reksadana Saham', desc: 'Risiko tinggi, return historis IHSG jangka panjang', icon: '📈', color: 'warning' };
+  return { name: 'Saham Langsung / Crypto', desc: 'Risiko sangat tinggi, butuh literasi dan disiplin tinggi', icon: '⚡', color: 'warning' };
+}
+
+/* ============== MAIN CALCULATION ============== */
 function calculate() {
   const pJ=parseInt(document.getElementById('slPesta').value);
   const gJ=parseInt(document.getElementById('slGaji').value);
+  const rPct=parseFloat(document.getElementById('slReturn').value);
   const pesta=pJ*1e6, gaji=gJ*1e6;
+  const r=rPct/100;
+
   document.getElementById('lblPesta').textContent='Rp '+pJ+' juta';
   document.getElementById('lblGaji').textContent='Rp '+gJ+' juta';
+  document.getElementById('lblReturn').textContent=fmtPct(rPct);
 
+  /* --- Calculator output --- */
   const tabBln=gaji*0.2, thnTunggu=pesta/(tabBln*12);
-  const r=0.18/12, n=36;
-  const cicilan=pesta*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+  const ktaR=0.18/12, n=36;
+  const cicilan=pesta*(ktaR*Math.pow(1+ktaR,n))/(Math.pow(1+ktaR,n)-1);
   const bunga=cicilan*n-pesta, pct=cicilan/gaji*100;
   const isR=pct>30, isY=pct>15;
   const sC=isR?'var(--danger-text)':isY?'var(--warning-text)':'var(--success-text)';
@@ -346,6 +691,7 @@ function calculate() {
     </div>
     <div style="font-size:11px;color:var(--text3)">⚙ KTA: bunga 18%/tahun, tenor 36 bulan. KPR ≈ Rp 3,5jt/bln, kendaraan ≈ Rp 1,5jt/bln.</div>`;
 
+  /* --- Debt visualization --- */
   const kpr=3500000, knd=1500000, total=cicilan+kpr+knd, sisa=gaji-total;
   const maxB=Math.max(total,gaji)*1.08;
   const pKpr=Math.min(100,kpr/maxB*100).toFixed(1);
@@ -385,35 +731,49 @@ function calculate() {
       </div>
     </div>`;
 
-  const i5=pesta*Math.pow(1.11,5), i10=pesta*Math.pow(1.11,10), i20=pesta*Math.pow(1.11,20);
+  /* --- Investment projection (uses dynamic rate) --- */
+  const i5=pesta*Math.pow(1+r,5), i10=pesta*Math.pow(1+r,10), i20=pesta*Math.pow(1+r,20);
   const dar=Math.round(pesta/gaji), dp=pesta>=30000000;
+  const inv=getInvestmentType(rPct);
+  const invBg = inv.color==='success'?'var(--success-bg)':inv.color==='info'?'var(--info-bg)':'var(--warning-bg)';
+  const invFg = inv.color==='success'?'var(--success-text)':inv.color==='info'?'var(--info-text)':'var(--warning-text)';
+  const invBd = inv.color==='success'?'var(--success-border)':inv.color==='info'?'var(--info-border)':'var(--warning-border)';
+
+  document.getElementById('invBadgeWrap').innerHTML=`
+    <div class="inv-badge" style="background:${invBg};color:${invFg};border:0.5px solid ${invBd}">
+      <span style="font-size:16px">${inv.icon}</span>
+      <span>Setara: <strong>${inv.name}</strong></span>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;line-height:1.5">${inv.desc}</div>
+  `;
+
   document.getElementById('investOut').innerHTML=`
     <div class="card" style="margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem"><span style="font-size:22px">🌳</span><div style="font-size:14px;font-weight:600">Jika ${fmtM(pesta)} diinvestasikan...</div></div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;padding-left:32px">alih-alih dihabiskan untuk satu hari pesta</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;padding-left:32px">dengan asumsi return <strong style="color:${invFg}">${fmtPct(rPct)}/tahun</strong> &mdash; alih-alih dihabiskan untuk satu hari pesta</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin-bottom:1rem">
         <div style="background:var(--bg2);border-radius:10px;padding:.875rem;text-align:center">
           <div style="font-size:20px;margin-bottom:4px">🌱</div>
           <div style="font-size:11px;color:var(--text2);margin-bottom:6px">dalam 5 tahun</div>
-          <div style="font-size:1.1rem;font-weight:700;color:var(--success-text)">${fmtM(i5)}</div>
+          <div style="font-size:1.1rem;font-weight:700;color:${invFg}">${fmtM(i5)}</div>
           <div style="font-size:11px;color:var(--text3)">+${Math.round((i5-pesta)/pesta*100)}%</div>
         </div>
         <div style="background:var(--bg2);border-radius:10px;padding:.875rem;text-align:center">
           <div style="font-size:20px;margin-bottom:4px">🌿</div>
           <div style="font-size:11px;color:var(--text2);margin-bottom:6px">dalam 10 tahun</div>
-          <div style="font-size:1.1rem;font-weight:700;color:var(--success-text)">${fmtM(i10)}</div>
+          <div style="font-size:1.1rem;font-weight:700;color:${invFg}">${fmtM(i10)}</div>
           <div style="font-size:11px;color:var(--text3)">+${Math.round((i10-pesta)/pesta*100)}%</div>
         </div>
         <div style="background:var(--bg2);border-radius:10px;padding:.875rem;text-align:center">
           <div style="font-size:20px;margin-bottom:4px">🌳</div>
           <div style="font-size:11px;color:var(--text2);margin-bottom:6px">dalam 20 tahun</div>
-          <div style="font-size:1.3rem;font-weight:700;color:var(--success-text)">${fmtM(i20)}</div>
+          <div style="font-size:1.3rem;font-weight:700;color:${invFg}">${fmtM(i20)}</div>
           <div style="font-size:11px;color:var(--text3)">+${Math.round((i20-pesta)/pesta*100)}%</div>
         </div>
       </div>
-      <div class="good" style="display:flex;gap:10px;align-items:flex-start">
+      <div class="good" style="display:flex;gap:10px;align-items:flex-start;background:${invBg};border-color:${invBd}">
         <span style="font-size:22px;flex-shrink:0">💡</span>
-        <div style="font-size:13px;color:var(--success-text);line-height:1.6">Uang pesta habis dalam satu hari. Uang yang sama jika diinvestasikan selama 20 tahun bisa menjadi modal pendidikan anak, dana pensiun, atau kebebasan finansial di usia 50-an.</div>
+        <div style="font-size:13px;color:${invFg};line-height:1.6">Uang pesta habis dalam satu hari. Bahkan dengan return konservatif, jika diinvestasikan selama 20 tahun bisa menjadi modal pendidikan anak, dana pensiun, atau langkah awal menuju kebebasan finansial.</div>
       </div>
     </div>
     <div class="card">
@@ -424,15 +784,25 @@ function calculate() {
     </div>`;
 }
 
+/* ============== INIT ============== */
 document.getElementById('slPesta').addEventListener('input', calculate);
 document.getElementById('slGaji').addEventListener('input', calculate);
+document.getElementById('slReturn').addEventListener('input', calculate);
 calculate();
 
-// Scroll reveal
+/* Scroll reveal */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* Allow Enter key on splash */
+document.addEventListener('keydown', e => {
+  if (!userOpened && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    openInvitation();
+  }
+});
 </script>
 </body>
 </html>
